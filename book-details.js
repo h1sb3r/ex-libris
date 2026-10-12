@@ -67,6 +67,7 @@
         if(!patch.title.trim()) throw new Error('Saisissez un titre.');
         patch.year=patch.publishedDate.match(/\b\d{4}\b/)?.[0] || 'Non indiquée';
         patch.manualFields=[...new Set([...(book.manualFields||[]),...Object.keys(patch).filter(field=>String(patch[field])!==String(book[field]||''))])];
+        patch.note=document.getElementById('note')?.value ?? book.note;
         commit(patch);render();
       } catch(error){feedback.textContent='Enregistrement impossible : '+error.message;}
     };
@@ -89,7 +90,10 @@
         for(const [field,value] of Object.entries(incoming))if(value!==undefined&&value!==''&&!(book.manualFields||[]).includes(field))patch[field]=value;
         patch.metadataUpdatedAt=Date.now();
         if(patch.publishedDate && !(book.manualFields||[]).includes('year'))patch.year=String(patch.publishedDate).match(/\b\d{4}\b/)?.[0] || book.year;
-        commit(patch);render();
+        patch.note=document.getElementById('note')?.value ?? book.note;
+        commit(patch);
+        if(editor.hidden)render();
+        else feedback.textContent='Informations actualisées. Vous pouvez terminer vos modifications.';
       }catch(error){if(root.isConnected)feedback.textContent=error.message.replace(/AIza[\w-]+/g,'[clé masquée]')+' Vos informations sont conservées.';}
       finally{refresh.disabled=false;}
     }
@@ -107,3 +111,4 @@
   new MutationObserver(()=>{mount();try{undo();}catch{}}).observe(document.getElementById('app'),{childList:true});
   mount();try{undo();}catch{}
 })();
+
