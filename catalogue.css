@@ -1,4 +1,6 @@
 #books-results{margin-top:26px;align-items:start;gap:36px 28px}
+.library-jacket{padding:0;background:var(--sand);border:0}.library-jacket img{width:100%;height:100%;object-fit:contain}
+.catalogue-add{display:flex;margin-top:16px;line-height:1.5;text-align:left}.catalogue-add:disabled{cursor:default;opacity:.65}
 .catalogue-card{min-width:0;border-bottom:1px solid var(--line);padding-bottom:24px}
 .catalogue-jacket{height:245px;display:flex;align-items:center;justify-content:center;background:var(--sand);position:relative;margin-bottom:20px;border-radius:3px;overflow:hidden}
 .catalogue-jacket img{position:relative;max-width:100%;height:100%;object-fit:contain;z-index:1;box-shadow:3px 4px 12px #292e2b15}
