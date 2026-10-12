@@ -65,19 +65,49 @@
         for (const item of items) {
           const info = item.volumeInfo || {};
           const article = document.createElement('article');
-          article.className = 'note-card';
+          article.className = 'catalogue-card';
+          const jacket = document.createElement('div');
+          jacket.className = 'catalogue-jacket';
+          const fallback = document.createElement('span');
+          fallback.className = 'catalogue-placeholder';
+          fallback.textContent = 'Couverture indisponible';
+          jacket.append(fallback);
+          const source = info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail;
+          if (typeof source === 'string') {
+            try {
+              const imageUrl = new URL(source);
+              if (['http:', 'https:'].includes(imageUrl.protocol) && /(^|\.)google(?:usercontent)?\.com$/.test(imageUrl.hostname)) {
+                imageUrl.protocol = 'https:';
+                const image = document.createElement('img');
+                image.alt = `Couverture de ${info.title || 'ce livre'}`;
+                image.loading = 'lazy'; image.decoding = 'async';
+                image.onload = () => { fallback.hidden = true; };
+                image.onerror = () => { image.remove(); fallback.hidden = false; };
+                image.src = imageUrl.href;
+                jacket.append(image);
+              }
+            } catch {}
+          }
+          article.append(jacket);
           const title = document.createElement('h3');
           title.textContent = info.title || 'Sans titre';
           const author = document.createElement('p');
           author.textContent = Array.isArray(info.authors) ? info.authors.join(', ') : 'Auteur non indiqué';
           const meta = document.createElement('p');
-          meta.textContent = [info.publisher, info.publishedDate].filter(Boolean).join(' · ');
+          meta.className = 'catalogue-meta';
+          meta.textContent = [info.publisher, typeof info.publishedDate === 'string' ? info.publishedDate.slice(0, 10) : '', info.pageCount ? `${info.pageCount} pages` : ''].filter(Boolean).join(' · ');
           article.append(title, author, meta);
+          const description = document.createElement('p');
+          description.className = 'catalogue-description';
+          // Parse catalogue HTML as an inert document; only plain text enters the page.
+          const text = typeof info.description === 'string' ? new DOMParser().parseFromString(info.description, 'text/html').body.textContent.replace(/\s+/g, ' ').trim() : '';
+          description.textContent = text ? text.slice(0, 220) + (text.length > 220 ? '…' : '') : 'Aucun résumé disponible pour cette édition.';
+          article.append(description);
           if (typeof item.id === 'string') {
             const link = document.createElement('a');
             link.href = `https://books.google.com/books?id=${encodeURIComponent(item.id)}`;
             link.target = '_blank'; link.rel = 'noopener noreferrer'; link.className = 'text-link';
-            link.textContent = 'Voir dans Google Books →'; article.append(link);
+            link.textContent = 'Voir la fiche et l’aperçu →'; article.append(link);
           }
           results.append(article);
         }
