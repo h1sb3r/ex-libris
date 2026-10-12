@@ -52,7 +52,7 @@
         const url = new URL('https://www.googleapis.com/books/v1/volumes');
         url.search = new URLSearchParams({ q: query, key, maxResults: '12', printType: 'books' });
         const response = await fetch(url, { signal: request.signal });
-        if (!response.ok) throw new Error(response.status === 403 ? 'Vérifiez l’activation de Books API et les restrictions de votre clé.' : response.status === 429 ? 'Quota Google Books atteint. Réessayez plus tard.' : 'La recherche Google Books est indisponible.');
+        if (!response.ok) throw new Error(response.status === 403 ? 'Vérifiez l’activation de Books API et les restrictions de votre clé.' : response.status === 429 ? 'Quota Google Books atteint. Réessayez plus tard.' : response.status === 400 ? 'Google Books refuse la requête : vérifiez la clé API et les termes recherchés (HTTP 400).' : `La recherche Google Books est indisponible (HTTP ${response.status}). Réessayez plus tard.`);
         const data = await response.json();
         if (request.signal.aborted) return;
         const items = Array.isArray(data.items) ? data.items : [];
@@ -86,3 +86,4 @@
   window.addEventListener('hashchange', mount);
   mount();
 })();
+
