@@ -19,3 +19,9 @@ Dans Google Cloud, activez Books API, créez une clé, choisissez les restrictio
 Dans Collection → Configurer Google Books, enregistrez la clé. Elle reste dans le localStorage de ce navigateur et doit être configurée séparément sur chaque appareil. Ne transmettez pas la clé dans le chat et ne l'insérez pas dans les fichiers Git. La balise `google-books-api-key` reste vide dans la version publiée. Une clé côté navigateur est visible par son utilisateur : les restrictions Google sont indispensables.
 
 Pour tester localement : `python -m http.server 8001 --bind 127.0.0.1`, puis ouvrir `http://127.0.0.1:8001/#collection`.
+
+## Open Library
+
+Source par défaut sans clé : https://openlibrary.org/search.json (lang=fr, 12 résultats). Une édition pertinente est sélectionnée par œuvre ; la jaquette peut appartenir à une autre édition si aucune couverture spécifique n’est disponible. Couvertures : https://covers.openlibrary.org/b/id/{id}-M.jpg?default=false. Une requête par seconde et cache de 30 recherches par session. Les ajouts des deux catalogues sont conservés localement, avec des identifiants distincts. Google Books reste disponible dans le sélecteur. Un extrait est montré quand le catalogue fournit first_sentence ; ce champ n’est pas un résumé complet.
+
+Pour un usage fréquent ou un déploiement à grande échelle, enregistrer l’application auprès d’Open Library et prévoir un serveur capable d’identifier les requêtes avec User-Agent/contact. Aucun contact personnel n’est transmis par cette version statique. Documentation : https://openlibrary.org/developers/api
