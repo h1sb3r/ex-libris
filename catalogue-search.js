@@ -115,7 +115,7 @@
           author.textContent = Array.isArray(info.authors) ? info.authors.join(', ') : 'Auteur non indiqué';
           const meta = document.createElement('p');
           meta.className = 'catalogue-meta';
-          meta.textContent = [info.publisher, typeof info.publishedDate === 'string' ? info.publishedDate.slice(0, 10) : '', info.pageCount ? `${info.pageCount} pages` : ''].filter(Boolean).join(' · ');
+          meta.textContent = [info.publisher, typeof info.publishedDate === 'string' ? (provider === 'openlibrary' ? info.publishedDate : info.publishedDate.slice(0, 10)) : '', info.pageCount ? `${info.pageCount} pages` : ''].filter(Boolean).join(' · ');
           article.append(title, author, meta);
           const description = document.createElement('p');
           description.className = 'catalogue-description';
