@@ -108,6 +108,28 @@
             link.href = `https://books.google.com/books?id=${encodeURIComponent(item.id)}`;
             link.target = '_blank'; link.rel = 'noopener noreferrer'; link.className = 'text-link';
             link.textContent = 'Voir la fiche et l’aperçu →'; article.append(link);
+            const add = document.createElement('button');
+            add.className = 'button catalogue-add';
+            add.type = 'button';
+            const feedback = document.createElement('p');
+            feedback.setAttribute('role', 'status');
+            function showAdded(book) {
+              add.textContent = 'Dans ma bibliothèque'; add.disabled = true;
+              const open = document.createElement('a');
+              open.className = 'text-link'; open.href = `#livre/${book.id}`;
+              open.textContent = 'Ouvrir ma fiche →'; feedback.replaceChildren(open);
+            }
+            const existing = window.exlibrisLibrary.find(item.id);
+            if (existing) showAdded(existing);
+            else add.textContent = 'Ajouter à ma bibliothèque';
+            add.onclick = () => {
+              try {
+                const book = window.exlibrisLibrary.add(item);
+                showAdded(book);
+                message.textContent = `« ${book.title} » ajouté à votre bibliothèque · À lire. Conservé dans ce navigateur.`;
+              } catch (error) { feedback.textContent = error.message; }
+            };
+            article.append(add, feedback);
           }
           results.append(article);
         }
