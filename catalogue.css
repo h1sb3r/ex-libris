@@ -14,3 +14,5 @@
 @media(max-width:1000px){#books-results{grid-template-columns:repeat(3,minmax(0,1fr))}.catalogue-jacket{height:220px}}
 @media(max-width:700px){#books-results{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 18px}.catalogue-jacket{height:205px}.catalogue-card h3{font-size:22px}}
 @media(max-width:380px){#books-results{grid-template-columns:1fr}.catalogue-jacket{height:260px}}
+
+.book-controls [data-editor]{display:grid;gap:15px;margin-top:20px}.book-controls [hidden]{display:none!important}.book-controls label{display:grid;gap:7px;color:var(--muted);font-size:12px}.book-controls input,.book-controls select{width:100%;padding:12px;background:transparent;border:1px solid var(--line);border-radius:3px}.book-controls textarea{min-height:130px}.book-controls [data-feedback]{line-height:1.6;color:var(--muted);font-size:12px}
